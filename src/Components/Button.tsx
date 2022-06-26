@@ -4,7 +4,7 @@ import {filterValueType} from "../App";
 type ButtonPropsType = {
     name:string
     callBack:()=>void
-    filterValue:filterValueType
+    filter:filterValueType
 }
 
 export const Button = (props:ButtonPropsType)=> {
@@ -13,7 +13,7 @@ export const Button = (props:ButtonPropsType)=> {
     }
     return (
         <div>
-            <button className={props.filterValue===props.name ? "active-filter" : ""} onClick={onClickHandler}>{props.name}</button>
+            <button className={props.filter===props.name ? "active-filter" : ""} onClick={onClickHandler}>{props.name}</button>
         </div>
     )
 }

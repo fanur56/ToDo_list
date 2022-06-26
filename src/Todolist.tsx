@@ -3,13 +3,15 @@ import {filterValueType} from "./App";
 import {Button} from "./Components/Button";
 
 type TodolistPropsType = {
+    id: string
     title: string
     tasks: Array<TasksType>
-    removeTask: (id: string) => void
-    changeFilter: (filterValue: filterValueType) => void
-    addTask: (newTitle: string) => void
-    changeCheckbox: (elId: string, value: boolean) => void
-    filterValue: filterValueType
+    removeTask: (id: string, todoListID: string) => void
+    filter: filterValueType
+    addTask: (newTitle: string, todoListID: string) => void
+    changeCheckbox: (elId: string, value: boolean, todoListID: string) => void
+    removeTodoList: (todoListID: string) => void
+    changeTodoListFilter: (filterValue: filterValueType, todoListID: string) => void
 }
 
 export type TasksType = {
@@ -21,12 +23,12 @@ export type TasksType = {
 
 export const Todolist = (props: TodolistPropsType) => {
 
-    let [newTitle, setNewTitle] = useState('')
-    let [error, setError] = useState<string | null>(null)
+    const [newTitle, setNewTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
 
     const addTaskHandler = () => {
         if (newTitle.trim() !== '') {
-            props.addTask(newTitle)
+            props.addTask(newTitle, props.id)
             setNewTitle('')
         } else {
             setError("Title is required")
@@ -45,20 +47,21 @@ export const Todolist = (props: TodolistPropsType) => {
     }
 
     const universalChangeFilterHandler = (value: filterValueType) => {
-        props.changeFilter(value)
+        return () => props.changeTodoListFilter(value, props.id)
     }
 
     const removeTaskHandler = (elID: string) => {
-        props.removeTask(elID)
+        props.removeTask(elID, props.id)
     }
 
     const ChangeCheckboxHandler = (elID: string, eventValue: boolean) => {
-        props.changeCheckbox(elID, eventValue)
+        props.changeCheckbox(elID, eventValue, props.id)
     }
 
     return (
         <div>
             <h3>{props.title}</h3>
+            <button onClick={() => props.removeTodoList(props.id)}>Del</button>
             <div>
                 <input className={error ? "error" : ""} value={newTitle} onChange={onChangeHandler}
                        onKeyDown={onKeyDownHandler}/>
@@ -82,12 +85,12 @@ export const Todolist = (props: TodolistPropsType) => {
 
             </ul>
             <div>
-                <Button filterValue={props.filterValue} name={'All'}
-                        callBack={() => universalChangeFilterHandler('All')}/>
-                <Button filterValue={props.filterValue} name={'Active'}
-                        callBack={() => universalChangeFilterHandler('Active')}/>
-                <Button filterValue={props.filterValue} name={'Completed'}
-                        callBack={() => universalChangeFilterHandler('Completed')}/>
+                <Button filter={props.filter} name={'All'}
+                        callBack={universalChangeFilterHandler('All')}/>
+                <Button filter={props.filter} name={'Active'}
+                        callBack={universalChangeFilterHandler('Active')}/>
+                <Button filter={props.filter} name={'Completed'}
+                        callBack={universalChangeFilterHandler('Completed')}/>
             </div>
         </div>
     )

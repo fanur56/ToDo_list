@@ -1,8 +1,10 @@
 import React, {ChangeEvent} from "react";
 import {filterValueType} from "./App";
-import {Button} from "./Components/Button";
+import {FilterButton} from "./Components/FilterButton";
 import {AddItemForm} from "./Components/AddItemForm"
 import {EditableSpan} from "./EditableSpan";
+import {IconButton, Checkbox, ListItem, List} from "@material-ui/core";
+import {Delete} from "@material-ui/icons";
 
 type TodolistPropsType = {
     id: string
@@ -39,47 +41,66 @@ export const Todolist = (props: TodolistPropsType) => {
         props.removeTask(elID, props.id)
     }
 
-    const ChangeCheckboxHandler = (elID: string, eventValue: boolean) => {
+    const TaskStatus = (elID: string, eventValue: boolean) => {
         props.changeCheckbox(elID, eventValue, props.id)
     }
 
     const changeTodoListTitle = (newTitle: string) => {
-        props.changeTodoListTitle (props.id, newTitle)
+        props.changeTodoListTitle(props.id, newTitle)
+    }
+
+    const removeTodoListHandler = () => {
+        props.removeTodoList(props.id)
     }
 
     return (
         <div>
-            <h3><EditableSpan title={props.title} onChange={changeTodoListTitle} />
-                <button onClick={() => props.removeTodoList(props.id)}>Del</button>
+            <h3><EditableSpan title={props.title}
+                              onChange={changeTodoListTitle}/>
+                <IconButton size={"small"}>
+                    <Delete onClick={removeTodoListHandler}/>
+                </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            <ul>
+            <List component={"ul"}>
                 {
                     props.tasks.map((el) => {
-                        const onchangeTitleHandler = (newValue:string) => {
-                            props.changeTaskTitle (el.id, newValue, props.id)
+                        const onchangeTitleHandler = (newValue: string) => {
+                            props.changeTaskTitle(el.id, newValue, props.id)
                         }
+
+                        const ChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                            TaskStatus(el.id, event.currentTarget.checked)
+                        }
+
                         return (
-                            <li key={el.id} className={el.isDone ? "isDone" : ""}>
-                                <input type="checkbox" checked={el.isDone}
-                                       onChange={(event: ChangeEvent<HTMLInputElement>) => ChangeCheckboxHandler(el.id, event.currentTarget.checked)}/>
+                            <ListItem key={el.id}
+                                      dense
+                                      divider
+                                      className={el.isDone ? "isDone" : ""}>
+                                <Checkbox color={"primary"}
+                                          size={"small"}
+                                          checked={el.isDone}
+                                          onChange={ChangeCheckboxHandler}/>
                                 <EditableSpan title={el.title}
                                               onChange={onchangeTitleHandler}/>
-                                <button onClick={() => removeTaskHandler(el.id)}>x</button>
-                            </li>
+                                <IconButton size={"small"}>
+                                    <Delete onClick={() => removeTaskHandler(el.id)}/>
+                                </IconButton>
+                            </ListItem>
 
                         )
                     })
                 }
 
-            </ul>
+            </List>
             <div>
-                <Button filter={props.filter} name={'All'}
-                        callBack={universalChangeFilterHandler('All')}/>
-                <Button filter={props.filter} name={'Active'}
-                        callBack={universalChangeFilterHandler('Active')}/>
-                <Button filter={props.filter} name={'Completed'}
-                        callBack={universalChangeFilterHandler('Completed')}/>
+                <FilterButton filter={props.filter} name={'All'}
+                              callBack={universalChangeFilterHandler('All')}/>
+                <FilterButton filter={props.filter} name={'Active'}
+                              callBack={universalChangeFilterHandler('Active')}/>
+                <FilterButton filter={props.filter} name={'Completed'}
+                              callBack={universalChangeFilterHandler('Completed')}/>
             </div>
         </div>
     )

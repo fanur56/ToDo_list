@@ -56,10 +56,6 @@ function App() {
         setTasks(copyTasks)
     }
 
-    const changeTodoListFilter = (filterValue: filterValueType, todoListID: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filterValue} : tl))
-    }
-
     const changeCheckbox = (taskId: string, value: boolean, todoListID: string) => {
         const copyTasks = {...tasks}
         copyTasks[todoListID] = tasks[todoListID].map(el => el.id === taskId ? {...el, isDone: value} : el)
@@ -70,6 +66,10 @@ function App() {
         const copyTasks = {...tasks}
         copyTasks[todoListID] = tasks[todoListID].map(el => el.id === taskId ? {...el, title: newTitle} : el)
         setTasks(copyTasks)
+    }
+
+    const changeTodoListFilter = (filterValue: filterValueType, todoListID: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filterValue} : tl))
     }
 
     const changeTodoListTitle = (id: string, newTitle: string) => {

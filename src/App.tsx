@@ -21,6 +21,7 @@ type TaskStateType = {
 function App() {
     const todoListID_1 = v1()
     const todoListID_2 = v1()
+
     const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
         {id: todoListID_1, title: 'What to learn', filter: 'All'},
         {id: todoListID_2, title: 'What to buy', filter: 'All'}
@@ -103,6 +104,7 @@ function App() {
         if (tl.filter === 'Active') {
             filteredTask = tasks[tl.id].filter(el => !el.isDone)
         }
+
         return (
             <Grid item key={tl.id}>
                 <Paper elevation={3} style={{padding: "20px"}}>

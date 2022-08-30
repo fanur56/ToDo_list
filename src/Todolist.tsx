@@ -55,10 +55,11 @@ export const Todolist = (props: TodolistPropsType) => {
 
     return (
         <div>
-            <h3><EditableSpan title={props.title}
+            <h3>
+                <EditableSpan title={props.title}
                               onChange={changeTodoListTitle}/>
-                <IconButton size={"small"}>
-                    <Delete onClick={removeTodoListHandler}/>
+                <IconButton size={"small"} onClick={removeTodoListHandler}>
+                    <Delete />
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
@@ -84,8 +85,8 @@ export const Todolist = (props: TodolistPropsType) => {
                                           onChange={ChangeCheckboxHandler}/>
                                 <EditableSpan title={el.title}
                                               onChange={onchangeTitleHandler}/>
-                                <IconButton size={"small"}>
-                                    <Delete onClick={() => removeTaskHandler(el.id)}/>
+                                <IconButton size={"small"} onClick={() => removeTaskHandler(el.id)}>
+                                    <Delete />
                                 </IconButton>
                             </ListItem>
 

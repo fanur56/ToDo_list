@@ -4,7 +4,9 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {createTheme, CssBaseline, ThemeProvider} from "@material-ui/core";
 import {teal, yellow} from "@material-ui/core/colors";
-import AppWithReducer from "./AppWithReducer";
+import AppWithRedux from "./AppWithRedux";
+import {Provider} from "react-redux";
+import {store} from "./state/store";
 
 const theme = createTheme({
     palette: {
@@ -15,10 +17,12 @@ const theme = createTheme({
 })
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
-        <CssBaseline/>
-        <AppWithReducer/>
-    </ThemeProvider>, document.getElementById('root'));
+    <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <AppWithRedux/>
+        </ThemeProvider>
+    </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

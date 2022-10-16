@@ -47,7 +47,8 @@ export const tasksReducer = (state: TaskStateType, action: ActionsType): TaskSta
             delete copyState[action.id]
             return copyState
         default:
-            throw new Error("I don't understand this type")
+            //throw new Error("I don't understand this type")
+            return state
     }
 }
 

@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 import {filterValueType} from "./App";
 import {FilterButton} from "./Components/FilterButton";
 import {AddItemForm} from "./Components/AddItemForm"
@@ -24,14 +24,13 @@ export type TasksType = {
     id: string,
     title: string,
     isDone: boolean,
-
 }
 
 export const Todolist = (props: TodolistPropsType) => {
 
-    const addTask = (title: string) => {
+    const addTask = useCallback( (title: string) => {
         props.addTask(title, props.id)
-    }
+    }, [props.addTask, props.id])
 
     const universalChangeFilterHandler = (value: filterValueType) => {
         return () => props.changeTodoListFilter(value, props.id)

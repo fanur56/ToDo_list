@@ -6,7 +6,8 @@ type addItemFormPropsType = {
     addItem: (title:string)=>void
 }
 
-export const AddItemForm: React.FC<addItemFormPropsType> = ({addItem}) => {
+export const AddItemForm: React.FC<addItemFormPropsType> = React.memo  (({addItem}) => {
+    console.log("AddItemForm")
     const [newTitle, setNewTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -15,7 +16,9 @@ export const AddItemForm: React.FC<addItemFormPropsType> = ({addItem}) => {
     }
 
     const onKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error) {
+            setError(null)
+        }
         if (event.key === 'Enter') {
             addTaskHandler()
         }
@@ -45,4 +48,4 @@ export const AddItemForm: React.FC<addItemFormPropsType> = ({addItem}) => {
             </IconButton>
         </div>
     )
-}
+})

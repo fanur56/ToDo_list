@@ -2,7 +2,7 @@ import {TasksType} from "../Todolist";
 import {Checkbox, IconButton, ListItem} from "@material-ui/core";
 import {EditableSpan} from "../EditableSpan";
 import {Delete} from "@material-ui/icons";
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 
 export type TaskPropsType = {
     task: TasksType
@@ -20,15 +20,14 @@ export const Task = React.memo( ({
 
     const removeTaskHandler = () => removeTask(task.id)
 
-    const onchangeTitleHandler = (newValue: string) => {
+    const onchangeTitleHandler = useCallback((newValue: string) => {
         changeTaskTitle(task.id, newValue)
-    }
+    }, [changeTaskTitle, task.id])
 
     const ChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
         changeCheckbox(task.id, event.currentTarget.checked)
     }
 
-    console.log("Task")
 
     return (
         <ListItem dense

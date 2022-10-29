@@ -45,9 +45,9 @@ export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
         props.changeCheckbox(elID, eventValue, props.id)
     }, [props.changeCheckbox, props.id])
 
-    const changeTodoListTitle = (newTitle: string) => {
+    const changeTodoListTitle = useCallback((newTitle: string) => {
         props.changeTodoListTitle(props.id, newTitle)
-    }
+    }, [props.changeTodoListTitle, props.id])
 
     const removeTodoListHandler = () => {
         props.removeTodoList(props.id)

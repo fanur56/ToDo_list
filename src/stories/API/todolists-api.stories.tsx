@@ -24,7 +24,7 @@ export const CreateTodolists = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.postTodolist("New List")
+        todolistsAPI.createTodolist("New List")
             .then((res) => {
                 setState(res.data)
             })
@@ -52,7 +52,7 @@ export const UpdateTodolists = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.putTodolist("d6373953-3948-4366-808f-ed2e1a8932b8", "Yo")
+        todolistsAPI.updateTodolist("d6373953-3948-4366-808f-ed2e1a8932b8", "Yo")
             .then((res) => {
                 setState(res.data)
             })
@@ -94,7 +94,7 @@ export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.postTask("d6373953-3948-4366-808f-ed2e1a8932b8", "Bye a book")
+        todolistsAPI.createTask("d6373953-3948-4366-808f-ed2e1a8932b8", "Bye a book")
             .then((res) => {
                 setState(res.data)
             })
@@ -108,7 +108,7 @@ export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.putTask("d6373953-3948-4366-808f-ed2e1a8932b8", "58fd9050-2d59-43f2-86d5-a7d1cd312a18", {
+        todolistsAPI.updateTask("d6373953-3948-4366-808f-ed2e1a8932b8", "58fd9050-2d59-43f2-86d5-a7d1cd312a18", {
             title: "Milk",
             description: "Bye a milk",
             status: 0,

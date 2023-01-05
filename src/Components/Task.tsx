@@ -1,11 +1,11 @@
-import {TasksType} from "../Todolist";
 import {Checkbox, IconButton, ListItem} from "@material-ui/core";
 import {EditableSpan} from "../EditableSpan";
 import {Delete} from "@material-ui/icons";
 import React, {ChangeEvent, useCallback} from "react";
+import {TaskStatuses, TaskType} from "../api/todolists-api";
 
 export type TaskPropsType = {
-    task: TasksType
+    task: TaskType
     removeTask: (id: string) => void
     changeTaskTitle: (id: string, newValue: string) => void
     changeCheckbox: (elId: string, value: boolean) => void
@@ -32,10 +32,10 @@ export const Task = React.memo( ({
     return (
         <ListItem dense
                   divider
-                  className={task.isDone ? "isDone" : ""}>
+                  className={task.status === TaskStatuses.Completed ? "isDone" : ""}>
             <Checkbox color={"primary"}
                       size={"small"}
-                      checked={task.isDone}
+                      checked={task.status === TaskStatuses.Completed}
                       onChange={ChangeCheckboxHandler}/>
             <EditableSpan title={task.title}
                           onChange={onchangeTitleHandler}/>

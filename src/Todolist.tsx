@@ -1,30 +1,25 @@
-import React, {ChangeEvent, useCallback} from "react";
-import {filterValueType} from "./App";
+import React, {useCallback} from "react";
 import {FilterButton} from "./Components/FilterButton";
 import {AddItemForm} from "./Components/AddItemForm"
 import {EditableSpan} from "./EditableSpan";
-import {IconButton, Checkbox, ListItem, List} from "@material-ui/core";
+import {IconButton, List} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 import {Task} from "./Components/Task";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
+import {filterValueType} from "./state/todolist-reducer";
 
 type TodolistPropsType = {
     id: string
     title: string
-    tasks: Array<TasksType>
+    tasks: Array<TaskType>
     removeTask: (id: string, todoListID: string) => void
     filter: filterValueType
     addTask: (newTitle: string, todoListID: string) => void
-    changeCheckbox: (elId: string, value: boolean, todoListID: string) => void
+    changeCheckbox: (elId: string, value: TaskStatuses, todoListID: string) => void
     removeTodoList: (todoListID: string) => void
     changeTodoListFilter: (filterValue: filterValueType, todoListID: string) => void
     changeTaskTitle: (id: string, newValue: string, todoListID: string) => void
     changeTodoListTitle: (id: string, newValue: string) => void
-}
-
-export type TasksType = {
-    id: string,
-    title: string,
-    isDone: boolean,
 }
 
 export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
@@ -42,7 +37,7 @@ export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
     }, [props.removeTask, props.id])
 
     const TaskStatus = useCallback ((elID: string, eventValue: boolean) => {
-        props.changeCheckbox(elID, eventValue, props.id)
+        props.changeCheckbox(elID, eventValue ? TaskStatuses.Completed : TaskStatuses.New, props.id)
     }, [props.changeCheckbox, props.id])
 
     const changeTodoListTitle = useCallback((newTitle: string) => {
@@ -58,10 +53,10 @@ export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
 
     let filteredTask = props.tasks
     if (props.filter === 'Completed') {
-        filteredTask = props.tasks.filter(el => el.isDone)
+        filteredTask = props.tasks.filter(el => el.status === TaskStatuses.Completed)
     }
     if (props.filter === 'Active') {
-        filteredTask = props.tasks.filter(el => !el.isDone)
+        filteredTask = props.tasks.filter(el => el.status === TaskStatuses.New)
     }
 
     return (

@@ -1,7 +1,7 @@
 import React from "react";
-import {filterValueType} from "../App";
 import {Button} from "@material-ui/core";
 import s from "./FilterButton.module.css"
+import {filterValueType} from "../state/todolist-reducer";
 
 type ButtonPropsType = {
     name: string

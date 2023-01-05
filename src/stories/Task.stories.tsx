@@ -2,6 +2,7 @@ import React from 'react';
 import {ComponentStory, ComponentMeta} from '@storybook/react';
 import {action} from "@storybook/addon-actions";
 import {Task} from "../Components/Task";
+import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 
 export default {
     title: 'TODOLISTS/Task',
@@ -24,7 +25,14 @@ TaskIsDone.args = {
     task: {
         id: "qwerty",
         title: "task #1",
-        isDone: true,
+        status: TaskStatuses.Completed,
+        startDate: "",
+        deadline: "",
+        addedDate: "",
+        order: 0,
+        priority: TaskPriorities.Low,
+        description: "",
+        todoListId: ""
     }
 };
 
@@ -34,7 +42,14 @@ TaskIsNotDone.args = {
     task: {
         id: "qwerty",
         title: "task #1",
-        isDone: false,
+        status: TaskStatuses.New,
+        startDate: "",
+        deadline: "",
+        addedDate: "",
+        order: 0,
+        priority: TaskPriorities.Low,
+        description: "",
+        todoListId: ""
     }
 };
 

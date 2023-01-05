@@ -1,50 +1,71 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TasksType, Todolist} from "./Todolist";
+import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./Components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-
-export type filterValueType = 'All' | 'Active' | 'Completed';
-
-export type TodoListType = {
-    id: string
-    title: string
-    filter: filterValueType
-}
+import {filterValueType, TodolistDomainType} from "./state/todolist-reducer";
+import {TaskPriorities, TaskStatuses, TaskType} from "./api/todolists-api";
 
 export type TaskStateType = {
-    [todoListID: string]: Array<TasksType>
+    [todoListID: string]: Array<TaskType>
 }
 
 function App() {
     const todoListID_1 = v1()
     const todoListID_2 = v1()
 
-    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
-        {id: todoListID_1, title: 'What to learn', filter: 'All'},
-        {id: todoListID_2, title: 'What to buy', filter: 'All'}
+    const [todoLists, setTodoLists] = useState<Array<TodolistDomainType>>([
+        {id: todoListID_1, title: 'What to learn', filter: 'All', addedDate: "", order: 0},
+        {id: todoListID_2, title: 'What to buy', filter: 'All', addedDate: "", order: 0}
     ])
 
     const [tasks, setTasks] = useState<TaskStateType>({
             [todoListID_1]: [
-                {id: v1(), title: "HTML&CSS", isDone: true},
-                {id: v1(), title: "JS", isDone: false},
-                {id: v1(), title: "JSX", isDone: true},
-                {id: v1(), title: "ReactJS", isDone: false},
-                {id: v1(), title: "Rest API", isDone: false}
+                {
+                    id: v1(), title: "HTML&CSS", status: TaskStatuses.Completed, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_1
+                },
+                {
+                    id: v1(), title: "JS", status: TaskStatuses.Completed, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_1
+                },
+                {
+                    id: v1(), title: "JSX", status: TaskStatuses.Completed, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_1
+                },
+                {
+                    id: v1(), title: "ReactJS", status: TaskStatuses.New, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_1
+                },
+                {
+                    id: v1(), title: "Rest API", status: TaskStatuses.New, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_1
+                }
             ],
             [todoListID_2]: [
-                {id: v1(), title: "Meat", isDone: true},
-                {id: v1(), title: "IceCream", isDone: false},
-                {id: v1(), title: "Beer", isDone: true}
+                {
+                    id: v1(), title: "Meat", status: TaskStatuses.Completed, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_2
+                },
+                {
+                    id: v1(), title: "IceCream", status: TaskStatuses.New, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_2
+                },
+                {
+                    id: v1(), title: "Beer", status: TaskStatuses.Completed, startDate: "", deadline: "",
+                    addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID_2
+                }
             ]
         }
     )
 
     const addTask = (newTitle: string, todoListID: string) => {
-        const newTask = {id: v1(), title: newTitle, isDone: false}
+        const newTask = {
+            id: v1(), title: newTitle, status: TaskStatuses.New, startDate: "", deadline: "",
+            addedDate: "", order: 0, priority: TaskPriorities.Low, description: "", todoListId: todoListID
+        }
         const copyTasks = {...tasks}
         copyTasks[todoListID] = [newTask, ...tasks[todoListID]]
         setTasks(copyTasks)
@@ -56,9 +77,9 @@ function App() {
         setTasks(copyTasks)
     }
 
-    const changeCheckbox = (taskId: string, value: boolean, todoListID: string) => {
+    const changeCheckbox = (taskId: string, value: TaskStatuses, todoListID: string) => {
         const copyTasks = {...tasks}
-        copyTasks[todoListID] = tasks[todoListID].map(el => el.id === taskId ? {...el, isDone: value} : el)
+        copyTasks[todoListID] = tasks[todoListID].map(el => el.id === taskId ? {...el, status: value} : el)
         setTasks(copyTasks)
     }
 
@@ -87,10 +108,12 @@ function App() {
 
     const addTodoList = (title: string) => {
         const newTodoListID = v1()
-        const newTodolist: TodoListType = {
+        const newTodolist: TodolistDomainType = {
             id: newTodoListID,
             title: title,
-            filter: 'All'
+            filter: 'All',
+            addedDate: "",
+            order: 0
         }
         setTodoLists([newTodolist, ...todoLists])
         setTasks({...tasks, [newTodoListID]: []})
@@ -99,10 +122,10 @@ function App() {
     const todoListsComponent = todoLists.map(tl => {
         let filteredTask = tasks[tl.id]
         if (tl.filter === 'Completed') {
-            filteredTask = tasks[tl.id].filter(el => el.isDone)
+            filteredTask = tasks[tl.id].filter(el => el.status === TaskStatuses.Completed)
         }
         if (tl.filter === 'Active') {
-            filteredTask = tasks[tl.id].filter(el => !el.isDone)
+            filteredTask = tasks[tl.id].filter(el => el.status === TaskStatuses.New)
         }
 
         return (

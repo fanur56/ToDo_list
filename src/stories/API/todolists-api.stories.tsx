@@ -24,7 +24,7 @@ export const CreateTodolists = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.createTodolist("New List")
+        todolistsAPI.createTodolist("Technologies")
             .then((res) => {
                 setState(res.data)
             })
@@ -66,7 +66,7 @@ export const GetTasks = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.getTasks("d6373953-3948-4366-808f-ed2e1a8932b8")
+        todolistsAPI.getTasks("b9c1ef87-6947-4a66-9127-178ea41229b6")
             .then((res) => {
                 setState(res.data.items)
             })
@@ -94,7 +94,7 @@ export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistsAPI.createTask("d6373953-3948-4366-808f-ed2e1a8932b8", "Bye a book")
+        todolistsAPI.createTask("b9c1ef87-6947-4a66-9127-178ea41229b6", "1234")
             .then((res) => {
                 setState(res.data)
             })

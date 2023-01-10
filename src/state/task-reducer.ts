@@ -1,19 +1,25 @@
 import {TaskStateType} from "../App";
 import {v1} from "uuid";
-import {AddTodoListAT, RemoveTodoListAT} from "./todolist-reducer";
-import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolists-api";
+import {AddTodoListAT, RemoveTodoListAT, setTodolistAT} from "./todolist-reducer";
+import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 
 export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
 export type AddTaskAT = ReturnType<typeof addTaskAC>
 export type ChangeTaskAT = ReturnType<typeof changeTaskStatusAC>
 export type ChangeTitleAT = ReturnType<typeof changeTaskTitleAC>
 
-type ActionsType = RemoveTaskAT | AddTaskAT | ChangeTaskAT | ChangeTitleAT | AddTodoListAT | RemoveTodoListAT
+type ActionsType = RemoveTaskAT | AddTaskAT | ChangeTaskAT | ChangeTitleAT | AddTodoListAT | RemoveTodoListAT | setTodolistAT
 
 const initialState: TaskStateType = {}
 
 export const tasksReducer = (state = initialState, action: ActionsType): TaskStateType => {
     switch (action.type) {
+        case "SET-TODOS":
+            const copyStateForSetTodos = {...state}
+            action.todos.forEach(tl=>{
+                copyStateForSetTodos[tl.id] = []
+            })
+            return copyStateForSetTodos
         case 'REMOVE-TASK':
             return {
                 ...state,

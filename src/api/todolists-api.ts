@@ -18,7 +18,9 @@ export type TodolistType = {
 type ResponseType<D = {}> = {
     resultCode: number
     messages: string[],
-    data: D
+    data: {
+        item: D
+    }
 }
 
 export enum TaskStatuses {

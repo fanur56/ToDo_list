@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {FilterButton} from "./Components/FilterButton";
 import {AddItemForm} from "./Components/AddItemForm"
 import {EditableSpan} from "./EditableSpan";
@@ -7,6 +7,8 @@ import {Delete} from "@material-ui/icons";
 import {Task} from "./Components/Task";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
 import {filterValueType} from "./state/todolist-reducer";
+import {getTasksTC} from "./state/task-reducer";
+import {AppDispatch} from "./state/store";
 
 type TodolistPropsType = {
     id: string
@@ -24,6 +26,12 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
 
+    const dispatch = AppDispatch()
+
+    useEffect(() => {
+        dispatch(getTasksTC(props.id))
+    }, [])
+
     const addTaskWithCallback = useCallback((title: string) => {
         addTask(title, props.id)
     }, [addTask, props.id])
@@ -36,7 +44,8 @@ export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
         props.removeTask(elID, props.id)
     }, [props.removeTask, props.id])
 
-    const TaskStatus = useCallback ((elID: string, eventValue: boolean) => {
+
+    const TaskStatus = useCallback((elID: string, eventValue: boolean) => {
         props.changeCheckbox(elID, eventValue ? TaskStatuses.Completed : TaskStatuses.New, props.id)
     }, [props.changeCheckbox, props.id])
 

@@ -6,7 +6,6 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from "@material-ui/icons";
 import {
     ChangeTodoListFilterAC,
-    ChangeTodoListTitleAC,
     ChangeTodoListTitleTC,
     createTodolistTC,
     deleteTodolistTC,
@@ -14,7 +13,7 @@ import {
     getTodolistsTC,
     TodolistDomainType
 } from "./state/todolist-reducer";
-import {addTaskTC, changeTaskTitleAC, changeTaskTitleTC, removeTaskTC, updateTaskTC} from "./state/task-reducer";
+import {addTaskTC, changeTaskTitleTC, removeTaskTC, updateTaskTC} from "./state/task-reducer";
 import {AppDispatch, useAppSelector} from "./state/store";
 import {TaskStatuses} from "./api/todolists-api";
 import {TaskStateType} from "./App";

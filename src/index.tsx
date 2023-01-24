@@ -1,28 +1,32 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import {createTheme, CssBaseline, ThemeProvider} from "@material-ui/core";
-import {teal, yellow} from "@material-ui/core/colors";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import AppWithRedux from "./AppWithRedux";
 import {Provider} from "react-redux";
 import {store} from "./state/store";
+import {teal, yellow} from "@mui/material/colors";
+import {createRoot} from "react-dom/client";
 
 const theme = createTheme({
     palette: {
         primary: teal,
-        secondary: yellow,
-        type: "dark"
+        secondary: yellow
     }
 })
 
-ReactDOM.render(
+const root = createRoot(
+    document.getElementById('root') as HTMLElement
+); 
+
+root.render(
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <AppWithRedux/>
         </ThemeProvider>
-    </Provider>, document.getElementById('root'));
+    </Provider>
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

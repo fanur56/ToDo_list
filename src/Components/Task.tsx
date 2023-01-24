@@ -1,6 +1,6 @@
-import {Checkbox, IconButton, ListItem} from "@material-ui/core";
+import {Checkbox, IconButton, ListItem} from "@mui/material";
 import {EditableSpan} from "../EditableSpan";
-import {Delete} from "@material-ui/icons";
+import {Delete} from "@mui/icons-material";
 import React, {ChangeEvent, useCallback} from "react";
 import {TaskStatuses, TaskType} from "../api/todolists-api";
 

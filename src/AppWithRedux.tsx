@@ -2,7 +2,17 @@ import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {AddItemForm} from "./Components/AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    LinearProgress,
+    Paper,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import {
     ChangeTodoListFilterAC,
@@ -17,8 +27,11 @@ import {addTaskTC, changeTaskTitleTC, removeTaskTC, updateTaskTC} from "./state/
 import {AppDispatch, useAppSelector} from "./state/store";
 import {TaskStatuses} from "./api/todolists-api";
 import {TaskStateType} from "./App";
+import {RequestStatusType} from "./state/app-reducer";
 
 function AppWithRedux() {
+
+    const status = useAppSelector<RequestStatusType>((state)=>state.appStatus.status)
 
     useEffect(() => {
         dispatch(getTodolistsTC())
@@ -94,6 +107,7 @@ function AppWithRedux() {
                     </Typography>
                     <Button color={"inherit"} variant={"outlined"}>Login</Button>
                 </Toolbar>
+                {status === "loading" && <LinearProgress color={"secondary"}/>}
             </AppBar>
             <Container fixed style={{padding: "20px 0"}}>
                 <Grid container>

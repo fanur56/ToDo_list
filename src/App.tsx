@@ -17,8 +17,8 @@ function App() {
     const todoListID_2 = v1()
 
     const [todoLists, setTodoLists] = useState<Array<TodolistDomainType>>([
-        {id: todoListID_1, title: 'What to learn', filter: 'All', addedDate: "", order: 0},
-        {id: todoListID_2, title: 'What to buy', filter: 'All', addedDate: "", order: 0}
+        {id: todoListID_1, title: 'What to learn', filter: 'All', addedDate: "", order: 0, entityStatus:"idle"},
+        {id: todoListID_2, title: 'What to buy', filter: 'All', addedDate: "", order: 0, entityStatus:"idle"}
     ])
 
     const [tasks, setTasks] = useState<TaskStateType>({
@@ -113,7 +113,8 @@ function App() {
             title: title,
             filter: 'All',
             addedDate: "",
-            order: 0
+            order: 0,
+            entityStatus:"idle"
         }
         setTodoLists([newTodolist, ...todoLists])
         setTasks({...tasks, [newTodoListID]: []})
@@ -143,6 +144,7 @@ function App() {
                         changeTodoListFilter={changeTodoListFilter}
                         changeTaskTitle={changeTaskTitle}
                         changeTodoListTitle={changeTodoListTitle}
+                        entityStatus={tl.entityStatus}
                     />
                 </Paper>
             </Grid>

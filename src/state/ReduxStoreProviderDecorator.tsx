@@ -16,8 +16,8 @@ const rootReducer = combineReducers({
 
 const initialGlobalState: AppRootStateType = {
     todoLists: [
-        {id: "todolistID_1", title: "What to learn", filter: "All", addedDate: "", order: 0},
-        {id: "todolistID_2", title: "What to buy", filter: "All", addedDate: "", order: 0}
+        {id: "todolistID_1", title: "What to learn", filter: "All", addedDate: "", order: 0, entityStatus:"idle"},
+        {id: "todolistID_2", title: "What to buy", filter: "All", addedDate: "", order: 0, entityStatus:"idle"}
     ],
     tasks: {
         ["todolistID_1"]: [
@@ -57,7 +57,10 @@ const initialGlobalState: AppRootStateType = {
             }
         ]
     },
-    appStatus: {status: "idle"}
+    appStatus: {
+        status: "idle",
+        error: null
+    }
 }
 
 export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState)

@@ -28,10 +28,11 @@ import {AppDispatch, useAppSelector} from "./state/store";
 import {TaskStatuses} from "./api/todolists-api";
 import {TaskStateType} from "./App";
 import {RequestStatusType} from "./state/app-reducer";
+import {ErrorSnackbars} from "./Components/ErrorSnackBar/ErrorSnackBar";
 
 function AppWithRedux() {
 
-    const status = useAppSelector<RequestStatusType>((state)=>state.appStatus.status)
+    const status = useAppSelector<RequestStatusType>((state) => state.appStatus.status)
 
     useEffect(() => {
         dispatch(getTodolistsTC())
@@ -90,6 +91,7 @@ function AppWithRedux() {
                         changeTodoListFilter={changeTodoListFilter}
                         changeTaskTitle={changeTaskTitle}
                         changeTodoListTitle={changeTodoListTitle}
+                        entityStatus={tl.entityStatus}
                     />
                 </Paper>
             </Grid>
@@ -115,6 +117,7 @@ function AppWithRedux() {
                 </Grid>
                 <Grid container spacing={2}>
                     {todoListsComponent}
+                    <ErrorSnackbars />
                 </Grid>
             </Container>
         </div>

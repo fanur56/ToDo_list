@@ -3,6 +3,7 @@ import {AddTodoListAT, RemoveTodoListAT, setTodolistAT} from "./todolist-reducer
 import {TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
+import {AppActionsType, setStatusAC} from "./app-reducer";
 
 export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
 export type AddTaskAT = ReturnType<typeof addTaskAC>
@@ -19,6 +20,7 @@ type ActionsType =
     | RemoveTodoListAT
     | setTodolistAT
     | SetTasksActionType
+    | AppActionsType
 
 const initialState: TaskStateType = {}
 
@@ -96,30 +98,36 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) => {
     return {type: "SET-TASKS", tasks, todolistId} as const
 }
 
-export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
+export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC("loading"))
     todolistsAPI.getTasks(todolistId)
         .then((response) => {
             dispatch(setTasksAC(response.data.items, todolistId))
+            dispatch(setStatusAC("succeeded"))
         })
 }
 
-export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC("loading"))
     todolistsAPI.deleteTask(todolistId, taskId)
         .then(() => {
             dispatch(removeTaskAC(taskId, todolistId))
+            dispatch(setStatusAC("succeeded"))
         })
 }
 
-export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC("loading"))
     todolistsAPI.createTask(todolistId, title)
         .then((response) => {
             const item = response.data.data.item
             dispatch(addTaskAC(item))
+            dispatch(setStatusAC("succeeded"))
         })
 }
 
 export const updateTaskTC = (todolistId: string, taskId: string, status: TaskStatuses) =>
-    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
 
         const tasks = getState().tasks
         const task = tasks[todolistId].find(t => t.id === taskId)
@@ -134,15 +142,18 @@ export const updateTaskTC = (todolistId: string, taskId: string, status: TaskSta
                 status
             }
 
+            dispatch(setStatusAC("loading"))
+
             todolistsAPI.updateTask(todolistId, taskId, model)
                 .then(() => {
                     dispatch(changeTaskStatusAC(taskId, status, todolistId))
+                    dispatch(setStatusAC("succeeded"))
                 })
         }
     }
 
 export const changeTaskTitleTC = (taskId: string, newTitle: string, todolistId: string) =>
-    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
 
         const tasks = getState().tasks
         const task = tasks[todolistId].find(t => t.id === taskId)
@@ -157,9 +168,12 @@ export const changeTaskTitleTC = (taskId: string, newTitle: string, todolistId: 
                 status: task.status
             }
 
+            dispatch(setStatusAC("loading"))
+
             todolistsAPI.updateTask(todolistId, taskId, model)
                 .then(() => {
                     dispatch(changeTaskTitleAC(taskId, newTitle, todolistId))
+                    dispatch(setStatusAC("succeeded"))
                 })
         }
     }

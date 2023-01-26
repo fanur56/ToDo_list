@@ -2,43 +2,18 @@ import {todolistsAPI, TodolistType} from "../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppActionsType, RequestStatusType, setErrorAC, setStatusAC} from "./app-reducer";
 
-export type RemoveTodoListAT = {
-    type: "REMOVE-TODOLIST"
-    id: string
-}
-
-export type AddTodoListAT = {
-    type: "ADD-TODOLIST"
-    title: string
-    todoListID: string
-}
-
-export type ChangeTodoListTitleAT = {
-    type: "CHANGE-TODOLIST-TITLE"
-    newTitle: string
-    id: string
-}
-
-export type ChangeTodoListFilterAT = {
-    type: "CHANGE-TODOLIST-FILTER"
-    id: string
-    filter: filterValueType
-}
-
-type changeEntityStatusAT = {
-    type: "CHANGE_ENTITY_STATUS",
-    id: string
-}
-
 export type setTodolistAT = ReturnType<typeof setTodolists>
+export type AddTodoListAT = ReturnType<typeof AddTodoListAC>
+export type RemoveTodoListAT = ReturnType<typeof RemoveTodoListAC>
 
 type ActionType = RemoveTodoListAT
     | AddTodoListAT
-    | ChangeTodoListTitleAT
-    | ChangeTodoListFilterAT
+    | ReturnType<typeof ChangeTodoListTitleAC>
+    | ReturnType<typeof ChangeTodoListFilterAC>
+    | ReturnType<typeof changeEntityStatusAC>
+    | ReturnType<typeof ChangeTodoListTitleAC>
     | setTodolistAT
     | AppActionsType
-    | changeEntityStatusAT
 
 export type filterValueType = 'All' | 'Active' | 'Completed'
 
@@ -75,42 +50,40 @@ export const todolistsReducer = (todoLists = initialState, action: ActionType): 
         case "CHANGE-TODOLIST-FILTER":
             return todoLists.map(tl => tl.id === action.id ? {...tl, filter: action.filter} : tl)
         case "CHANGE_ENTITY_STATUS":
-            const todolistForChangeEntityStatus = todoLists.find(tl => tl.id === action.id)
-            return {
-
-            }
+            return todoLists.map(tl=>tl.id === action.id ? {...tl, entityStatus: action.entityStatus} : tl)
         default:
             return todoLists
     }
 }
 
-export const RemoveTodoListAC = (id: string): RemoveTodoListAT => ({
+export const RemoveTodoListAC = (id: string) => ({
     type: "REMOVE-TODOLIST",
     id
-})
+} as const)
 
-export const AddTodoListAC = (title: string, id: string): AddTodoListAT => ({
+export const AddTodoListAC = (title: string, id: string) => ({
     type: "ADD-TODOLIST",
     title,
     todoListID: id
-})
+} as const)
 
-export const ChangeTodoListTitleAC = (newTitle: string, id: string): ChangeTodoListTitleAT => ({
+export const ChangeTodoListTitleAC = (newTitle: string, id: string) => ({
     type: "CHANGE-TODOLIST-TITLE",
     newTitle,
     id
-})
+} as const)
 
-export const ChangeTodoListFilterAC = (id: string, filter: filterValueType): ChangeTodoListFilterAT => ({
+export const ChangeTodoListFilterAC = (id: string, filter: filterValueType) => ({
     type: "CHANGE-TODOLIST-FILTER",
     id,
     filter
-})
+} as const)
 
-export const changeEntityStatusAC = (id: string) => ({
+export const changeEntityStatusAC = (id: string, entityStatus: RequestStatusType) => ({
     type: "CHANGE_ENTITY_STATUS",
-    id
-})
+    id,
+    entityStatus
+} as const)
 
 export const setTodolists = (todos: TodolistType[]) => {
     return {
@@ -130,10 +103,16 @@ export const getTodolistsTC = () => (dispatch: Dispatch<ActionType>) => {
 
 export const deleteTodolistTC = (todoListID: string) => (dispatch: Dispatch<ActionType>) => {
     dispatch(setStatusAC("loading"))
+    dispatch(changeEntityStatusAC(todoListID, "loading"))
     todolistsAPI.deleteTodolist(todoListID)
         .then(() => {
             dispatch(RemoveTodoListAC(todoListID))
             dispatch(setStatusAC("succeeded"))
+        })
+        .catch((error)=>{
+            dispatch(setStatusAC("failed"))
+            dispatch(changeEntityStatusAC(todoListID, "failed"))
+            dispatch(setErrorAC(error.message))
         })
 }
 

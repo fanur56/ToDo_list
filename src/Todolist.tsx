@@ -75,11 +75,14 @@ export const Todolist = React.memo(({addTask, ...props}: TodolistPropsType) => {
             <h3>
                 <EditableSpan title={props.title}
                               onChange={changeTodoListTitle}/>
-                <IconButton disabled={props.entityStatus === "loading"} size={"small"} onClick={removeTodoListHandler}>
+                <IconButton disabled={props.entityStatus === "loading"}
+                            size={"small"}
+                            color={"primary"}
+                            onClick={removeTodoListHandler}>
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm addItem={addTaskWithCallback}/>
+            <AddItemForm addItem={addTaskWithCallback} disabled={props.entityStatus === "loading"}/>
             <List component={"ul"}>
                 {
                     filteredTask.map((el) => {

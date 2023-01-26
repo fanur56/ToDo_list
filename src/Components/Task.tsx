@@ -39,7 +39,7 @@ export const Task = React.memo( ({
                       onChange={ChangeCheckboxHandler}/>
             <EditableSpan title={task.title}
                           onChange={onchangeTitleHandler}/>
-            <IconButton size={"small"} onClick={removeTaskHandler}>
+            <IconButton size={"small"} onClick={removeTaskHandler} color={"primary"}>
                 <Delete />
             </IconButton>
         </ListItem>

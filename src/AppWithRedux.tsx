@@ -29,6 +29,7 @@ import {TaskStatuses} from "./api/todolists-api";
 import {TaskStateType} from "./App";
 import {RequestStatusType} from "./state/app-reducer";
 import {ErrorSnackbars} from "./Components/ErrorSnackBar/ErrorSnackBar";
+import {Login} from "./Components/Login/Login";
 
 function AppWithRedux() {
 
@@ -120,6 +121,7 @@ function AppWithRedux() {
                     <ErrorSnackbars />
                 </Grid>
             </Container>
+            <Login/>
         </div>
     );
 }

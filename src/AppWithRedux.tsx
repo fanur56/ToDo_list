@@ -15,14 +15,16 @@ import {RequestStatusType} from "./state/app-reducer";
 import {ErrorSnackbars} from "./Components/ErrorSnackBar/ErrorSnackBar";
 import {Login} from "./Components/Login/Login";
 import {TodolistsList} from "./Components/TodolistsList";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {NotFound} from "./Components/404/404";
 
 function AppWithRedux() {
+
     const status = useAppSelector<RequestStatusType>((state) => state.appStatus.status)
 
     return (
         <div className="App">
-            <ErrorSnackbars />
+            <ErrorSnackbars/>
             <AppBar position={"static"}>
                 <Toolbar style={{justifyContent: "space-between"}}>
                     <IconButton edge={"start"} color={"inherit"} aria-label={"menu"}>
@@ -39,10 +41,10 @@ function AppWithRedux() {
                 <Routes>
                     <Route path={"/"} element={<TodolistsList/>}/>
                     <Route path={"/login"} element={<Login/>}/>
+                    <Route path={"/404"} element={<NotFound/>}/>
+                    <Route path={"*"} element={<Navigate to={"/404"}/>}/>
                 </Routes>
-                <TodolistsList/>
             </Container>
-            <Login/>
         </div>
     );
 }

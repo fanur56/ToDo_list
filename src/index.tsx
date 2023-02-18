@@ -7,6 +7,7 @@ import {Provider} from "react-redux";
 import {store} from "./state/store";
 import {teal, yellow} from "@mui/material/colors";
 import {createRoot} from "react-dom/client";
+import {BrowserRouter} from "react-router-dom";
 
 const theme = createTheme({
     palette: {
@@ -20,12 +21,14 @@ const root = createRoot(
 );
 
 root.render(
-    <Provider store={store}>
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <AppWithRedux/>
-        </ThemeProvider>
-    </Provider>
+    <BrowserRouter>
+        <Provider store={store}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <AppWithRedux/>
+            </ThemeProvider>
+        </Provider>
+    </BrowserRouter>
 );
 
 // If you want your app to work offline and load faster, you can change

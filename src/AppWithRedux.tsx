@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import './App.css';
 import {
     AppBar,
-    Button,
+    Button, CircularProgress,
     Container,
     IconButton,
     LinearProgress,
@@ -17,16 +17,26 @@ import {Login} from "./Components/Login/Login";
 import {TodolistsList} from "./Components/TodolistsList";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {NotFound} from "./Components/404/404";
-import {meTC} from "./Components/Login/auth-reducer";
+import {logOutTC, meTC} from "./Components/Login/auth-reducer";
 
 function AppWithRedux() {
 
     const dispatch = AppDispatch()
     const status = useAppSelector<RequestStatusType>((state) => state.appStatus.status)
+    const isInitialized = useAppSelector<boolean>((state) => state.appStatus.isInitialized)
+    const isLoggedIn = useAppSelector<boolean | null>((state) => state.auth.isLoggedIn)
+
+    const logOutHandler=()=>dispatch(logOutTC())
 
     useEffect(()=>{
         dispatch(meTC())
     }, [])
+
+    if (!isInitialized) {
+        return <div style = {{position: "fixed", top: "30%", textAlign: "center", width: "100%"}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">
@@ -39,7 +49,9 @@ function AppWithRedux() {
                     <Typography variant={"h6"}>
                         Todolists
                     </Typography>
-                    <Button color={"inherit"} variant={"outlined"}>Login</Button>
+                    { isLoggedIn && <Button color={"inherit"}
+                            variant={"outlined"}
+                            onClick={logOutHandler}>Log out</Button>}
                 </Toolbar>
                 {status === "loading" && <LinearProgress color={"secondary"}/>}
             </AppBar>

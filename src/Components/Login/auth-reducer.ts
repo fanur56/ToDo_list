@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux'
-import {AppActionsType, setStatusAC} from "../../state/app-reducer";
+import {AppActionsType, setIsInitializedAC, setStatusAC} from "../../state/app-reducer";
 import {authAPI, LoginType} from "../../api/todolists-api";
 import {HandleNetworkServerError, HandleServerAppError} from "../../utils/error-utils";
 
@@ -45,6 +45,26 @@ export const meTC = () => async (dispatch: Dispatch<ActionsType>) => {
         const res = await authAPI.me()
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true))
+            dispatch(setStatusAC('succeeded'))
+        } else {
+            HandleServerAppError(dispatch, res.data)
+            dispatch(setStatusAC('failed'))
+        }
+    } catch (e) {
+        // @ts-ignore
+        HandleNetworkServerError(dispatch, e)
+        dispatch(setStatusAC('failed'))
+    } finally {
+        dispatch(setIsInitializedAC(true))
+    }
+}
+
+export const logOutTC = () => async (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setStatusAC('loading'))
+    try {
+        const res = await authAPI.logOut()
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(false))
             dispatch(setStatusAC('succeeded'))
         } else {
             HandleServerAppError(dispatch, res.data)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {
     AppBar,
@@ -10,17 +10,23 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from "@mui/icons-material";
-import {useAppSelector} from "./state/store";
+import {AppDispatch, useAppSelector} from "./state/store";
 import {RequestStatusType} from "./state/app-reducer";
 import {ErrorSnackbars} from "./Components/ErrorSnackBar/ErrorSnackBar";
 import {Login} from "./Components/Login/Login";
 import {TodolistsList} from "./Components/TodolistsList";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {NotFound} from "./Components/404/404";
+import {meTC} from "./Components/Login/auth-reducer";
 
 function AppWithRedux() {
 
+    const dispatch = AppDispatch()
     const status = useAppSelector<RequestStatusType>((state) => state.appStatus.status)
+
+    useEffect(()=>{
+        dispatch(meTC())
+    }, [])
 
     return (
         <div className="App">

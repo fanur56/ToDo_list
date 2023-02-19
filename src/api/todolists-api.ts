@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 const instance = axios.create({
     withCredentials: true,
@@ -63,6 +63,36 @@ export type ResponseType<D = {}> = {
     messages: string[],
     data: {
         item: D
+    }
+}
+
+export type AuthResponseType = {
+    resultCode: number
+    messages: string[],
+    data: {
+        userId: number
+    }
+}
+
+export type LoginType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
+
+export type UserType = {
+    id: string
+    email: string
+    login: string
+}
+
+export const authAPI = {
+    login(data: LoginType) {
+        return instance.post<LoginType, AxiosResponse<AuthResponseType>>("auth/login", data)
+    },
+    me () {
+        return instance.get<ResponseType<UserType>>("auth/me")
     }
 }
 

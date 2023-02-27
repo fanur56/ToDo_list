@@ -94,8 +94,8 @@ test('correct task should be added to correct array', () => {
         priority: TaskPriorities.Low,
         startDate: "",
         deadline: "",
-        id: "todolistId2",
-        todoListId: "",
+        id: "",
+        todoListId: "todolistId2",
         order: 0,
         addedDate: ""
     });
